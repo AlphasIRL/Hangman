@@ -1,0 +1,81 @@
+import random
+from sys import exit
+
+times_won = 0
+times_lost = 0
+
+
+def menu():
+    while True:
+        choice = input('Type "play" to play the game, "results" to show the scoreboard, and "exit" to quit: ')
+        if choice == "exit":
+            exit()
+        elif choice == "play":
+            break
+        elif choice == "results":
+            print(f"You won: {times_won} times")
+            print(f"You lost: {times_lost} times")
+
+
+print("H A N G M A N")
+
+while True:
+    word_list = ["python", "java", "swift", "javascript"]
+    word = random.choice(word_list)
+    hidden_word = word.replace(word, "-" * len(word))
+    menu()
+    print()
+    print(hidden_word)
+
+    real_word_list = list(word)
+    hidden_word_list = list(hidden_word)
+    guesses_list = list()
+    attempts = 8
+    while True:
+        while True:
+            guess = input("Input a letter: ")
+            if len(guess) != 1:
+                print("Please, input a single letter.")
+                print()
+                print("".join(hidden_word_list))
+            elif guess.isupper() or not guess.isalpha():
+                print("Please, enter a lowercase letter from the English alphabet.")
+                print()
+                print("".join(hidden_word_list))
+            else:
+                break
+
+        if guess in guesses_list:
+            print("You've already guessed this letter.")
+            print()
+            print("".join(hidden_word_list))
+            continue
+        else:
+            guesses_list.append(guess)
+        if guess in hidden_word_list:
+            print("No improvements.")
+            attempts -= 1
+        if guess in real_word_list:
+            print()
+        if guess in real_word_list:
+            for number in range(len(real_word_list)):
+                if guess == real_word_list[number]:
+                    hidden_word_list[number] = guess
+        else:
+            print("That letter doesn't appear in the word.")
+            print()
+            attempts -= 1
+
+        if "-" not in hidden_word_list:
+            attempts = 0
+            print(f"You guessed the word {word}!")
+            print("You survived!")
+            times_won += 1
+            break
+
+        elif attempts == 0:
+            print("You lost!")
+            times_lost += 1
+            break
+
+        print("".join(hidden_word_list))
